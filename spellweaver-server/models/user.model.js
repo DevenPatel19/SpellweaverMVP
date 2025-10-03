@@ -22,3 +22,4 @@ therapistId: { type: Schema.Types.ObjectId, ref: "User", default: null }, // pat
 );
 
 export default mongoose.model("User", UserSchema);
+ 

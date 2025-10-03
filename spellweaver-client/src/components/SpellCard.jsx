@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../styles/SpellCard.css";
 
 export default function SpellCard({ spell, onCast, onDelete, onEdit }) {
+  const [journal, setJournal] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(spell.name);
   const [description, setDescription] = useState(spell.description);
@@ -73,6 +74,13 @@ export default function SpellCard({ spell, onCast, onDelete, onEdit }) {
         <>
           <h3>{spell.name}</h3>
           <p>{spell.description}</p>
+          <input
+        type="text"
+        placeholder="Add journal entry..."
+        value={journal}
+        onChange={(e) => setJournal(e.target.value)}
+        style={{ width: "100%", marginBottom: "0.5rem" }}
+      />
           <div className="card-actions" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setIsEditing(true)}>✏️ Edit</button>
             <button onClick={() => onDelete(spell._id)}>🗑️ Delete</button>

@@ -15,6 +15,7 @@ const SpellcastSchema = new Schema(
       required: true,
       index: true,
     }, // who cast (patient or therapist)
+    journal: { type: String }, // optional journal entry
     timestamp: { type: Date, default: Date.now },
     context: Schema.Types.Mixed, // small JSON notes (in prod: encrypt)
     visibleTo: [{ type: Schema.Types.ObjectId, ref: "User" }],

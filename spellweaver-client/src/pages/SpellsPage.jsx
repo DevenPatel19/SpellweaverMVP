@@ -32,23 +32,45 @@ export default function SpellsPage({ accessToken }) {
   }, [accessToken]);
 
   // Cast spell handler
-  const handleCast = async (spell) => {
-    if (!accessToken) return console.error("No access token available");
+// Cast spell handler
+const handleCast = async (spell, journal = "") => {
+  if (!accessToken) return console.error("No access token available");
 
-    try {
-      await fetch("http://localhost:4000/api/v1/spells/cast", {
+  try {
+    const res = await fetch(
+      `http://localhost:4000/api/v1/spells/${spell._id}/cast`,
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ spellId: spell._id }),
-      });
-      console.log(`Casting ${spell.name}! ✨`);
-    } catch (err) {
-      console.error("Failed to cast spell:", err);
+        body: JSON.stringify({ context: {}, journal }), // send journal
+      }
+    );
+
+    if (!res.ok) {
+      const errData = await res.json();
+      throw new Error(errData?.error?.message || `HTTP ${res.status}`);
     }
-  };
+
+    const data = await res.json();
+    console.log(`Casting ${spell.name}! ✨ Cast ID: ${data.id}`);
+
+    // show temporary cast state
+    setSpells((prev) =>
+      prev.map((s) =>
+        s._id === spell._id ? { ...s, lastCastId: data.id } : s
+      )
+    );
+    setError(null);
+  } catch (err) {
+    console.error("Failed to cast spell:", err);
+    setError(`Failed to cast ${spell.name}: ${err.message}`);
+  }
+};
+
+
 
   // Add new spell
   const handleAdd = async () => {
@@ -100,17 +122,25 @@ export default function SpellsPage({ accessToken }) {
   const handleEdit = async (updatedSpell) => {
     if (!accessToken) return console.error("No access token available");
 
-    setSpells(spells.map((s) => (s._id === updatedSpell._id ? updatedSpell : s)));
+    setSpells(
+      spells.map((s) => (s._id === updatedSpell._id ? updatedSpell : s))
+    );
 
     try {
-      const res = await fetch(`http://localhost:4000/api/v1/spells/${updatedSpell._id}`, {
-        method: "PATCH", // match backend
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(updatedSpell),
-      });
+      const res = await fetch(
+        `http://localhost:4000/api/v1/spells/${updatedSpell._id}`,
+        {
+          method: "PATCH", // match backend
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            name: updatedSpell.name,
+            description: updatedSpell.description,
+          }),
+        }
+      );
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
     } catch (err) {

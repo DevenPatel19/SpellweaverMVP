@@ -22,4 +22,7 @@ app.use('/api/v1/spells', spellsRoutes);
 app.use('/api/v1/spells', spellcastsRoutes); 
 app.use('/api/v1/conversations', convRoutes);
 
+// Cast a spell 
+app.post('/api/v1/spells/:id/cast', spellcastsRoutes);
+
 export default app;

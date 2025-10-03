@@ -28,15 +28,15 @@ export default function Login({ onLogin }) {
         return;
       }
 
-      // ✅ Save token in localStorage for SpellsPage
+      // ✅ Save token so refresh works
       localStorage.setItem('accessToken', data.accessToken);
 
-      // ✅ Update parent state
+      // ✅ Pass token to App.jsx (which shows SpellsPage)
       onLogin(data.accessToken);
 
     } catch (err) {
       console.error(err);
-      setError('Network error, please try again');
+      setError('Network error');
     } finally {
       setLoading(false);
     }
@@ -50,21 +50,13 @@ export default function Login({ onLogin }) {
           label="Email"
           type="email"
           value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            if (error) setError(null); // clear error on input
-          }}
-          disabled={loading}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <Input
           label="Password"
           type="password"
           value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            if (error) setError(null); // clear error on input
-          }}
-          disabled={loading}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit" style={{ padding: '0.5rem 1rem', width: '100%' }} disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}

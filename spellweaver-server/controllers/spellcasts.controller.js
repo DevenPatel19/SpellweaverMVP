@@ -12,13 +12,13 @@ export async function castSpell(req, res, next) {
     // Only owner (patient) or therapist (with assignment) should cast — decide your rule:
     const userId = req.user.id;
     // allow owner to cast
-    if (spell.ownerId.toString() !== userId && req.user.role !== 'therapist') {
+    if (spell.userId.toString() !== userId && req.user.role !== 'therapist') {
       return res.status(403).json({ error: { code: 'FORBIDDEN', message: 'Not allowed to cast' } });
     }
 
     // load owner to find therapist
-    const owner = await User.findById(spell.ownerId).select('therapistId');
-    const visibleTo = [spell.ownerId];
+    const owner = await User.findById(spell.userId).select('therapistId');
+    const visibleTo = [spell.userId];
     if (owner?.therapistId) visibleTo.push(owner.therapistId);
 
     const cast = await Spellcast.create({
