@@ -1,0 +1,193 @@
+{
+  "info": {
+    "name": "Spellweaver API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Signup Patient",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"patient@example.com\",\n  \"password\": \"Password123\",\n  \"role\": \"patient\",\n  \"name\": { \"first\": \"Pat\", \"last\": \"Smith\" }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/signup",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "signup"]
+        }
+      }
+    },
+    {
+      "name": "Signup Therapist",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"therapist@example.com\",\n  \"password\": \"Password123\",\n  \"role\": \"therapist\",\n  \"name\": { \"first\": \"Ella\", \"last\": \"Mage\" },\n  \"npi\": \"1234567890\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/signup",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "signup"]
+        }
+      }
+    },
+    {
+      "name": "Login Patient",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const data = pm.response.json();",
+              "if (data.accessToken) {",
+              "    pm.environment.set('accessToken', data.accessToken);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"patient@example.com\",\n  \"password\": \"Password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Create Spell",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Deep Breath\",\n  \"content\": \"Breathe in for 5 counts, out for 5 counts\",\n  \"tags\": [\"calm\", \"breath\"]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/spells",
+          "host": ["{{baseUrl}}"],
+          "path": ["spells"]
+        }
+      }
+    },
+    {
+      "name": "Get Spell by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/spells/{{spellId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["spells", "{{spellId}}"]
+        }
+      }
+    },
+    {
+      "name": "Cast Spell",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"context\": {\"mood\": \"stressed\", \"notes\": \"used breathing\"}\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/spells/{{spellId}}/cast",
+          "host": ["{{baseUrl}}"],
+          "path": ["spells", "{{spellId}}", "cast"]
+        }
+      }
+    },
+    {
+      "name": "Ensure Conversation",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patientId\": \"{{patientId}}\",\n  \"therapistId\": \"{{therapistId}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/conversations/ensure",
+          "host": ["{{baseUrl}}"],
+          "path": ["conversations", "ensure"]
+        }
+      }
+    },
+    {
+      "name": "Post Message",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"body\": \"Hello, how are you?\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages",
+          "host": ["{{baseUrl}}"],
+          "path": ["conversations", "{{conversationId}}", "messages"]
+        }
+      }
+    },
+    {
+      "name": "Get Messages",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages",
+          "host": ["{{baseUrl}}"],
+          "path": ["conversations", "{{conversationId}}", "messages"]
+        }
+      }
+    }
+  ]
+}

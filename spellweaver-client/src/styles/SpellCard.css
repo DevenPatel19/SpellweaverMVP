@@ -1,0 +1,101 @@
+.spell-card {
+  position: relative;
+  background: rgba(40, 40, 60, 0.7);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 10px;
+  box-shadow: 0 0 10px rgba(100, 200, 255, 0.2);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  overflow: hidden;
+}
+
+.spell-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(100, 200, 255, 0.6);
+}
+
+.spell-card h3 {
+  margin: 0 0 8px 0;
+}
+
+.spell-card p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* --- Card Actions --- */
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.card-actions button {
+  background: rgba(100, 200, 255, 0.2);
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.card-actions button:hover {
+  background: rgba(100, 200, 255, 0.4);
+}
+
+/* --- Edit Form --- */
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+}
+
+.edit-form button {
+  margin-right: 6px;
+  background: rgba(100, 200, 255, 0.2);
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.edit-form button:hover {
+  background: rgba(100, 200, 255, 0.4);
+}
+
+/* --- Particle Burst --- */
+.particle-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(196, 100, 255, 0.9);
+  border-radius: 50%;
+  transform: translate(0, 0);
+  animation: burst 0.8s forwards;
+}
+
+@keyframes burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--x), var(--y)) scale(0.5);
+  }
+}
